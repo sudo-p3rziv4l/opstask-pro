@@ -69,7 +69,7 @@ export default function DashboardLayout({ children }) {
       <main className={`${mainPadding} p-4 md:p-8 mt-[72px] p-4 md:p-8 transition-all duration-300`}>
         {children}
       </main>
-      <FloatingChat />
+      {/* <FloatingChat /> */}          {/* Cloe AI Chatbot is temporarily disabled for performance tuning */}          
     </div>
   );
 }

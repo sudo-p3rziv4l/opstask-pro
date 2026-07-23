@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { RefreshCcw } from "lucide-react";
+import { RefreshCcw, Download } from "lucide-react";
 import TaskModal from "./TaskModal";
 
 const COLUMNS = {

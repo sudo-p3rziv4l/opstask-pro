@@ -132,10 +132,10 @@ export async function POST(request) {
 
     const userName = user.name;
     const body = await request.json();
-    const { title, description, status, priority, assigned_to, start_date, due_date, deployment_guide, project_name } = body;
+    const { title, description, status, priority, assigned_to, start_date, due_date, deployment_guide, attachment_url, attachment_name, project_name } = body;
 
     const insertResult = await query(
-      `INSERT INTO tasks (title, description, status, requester_name, assigned_to, start_date, due_date, deployment_guide, project_name)
+      `INSERT INTO tasks (title, description, status, requester_name, assigned_to, start_date, due_date, deployment_guide, attachment_url, attachment_name, project_name)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
       [title, description, status || 'todo', userName, assigned_to || null, start_date || null, due_date || null, deployment_guide || null, project_name || null]
     );

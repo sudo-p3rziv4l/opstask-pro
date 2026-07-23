@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
-import { X, ChevronLeft, ChevronRight, MessageSquare, ExternalLink } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, MessageSquare, ExternalLink, Download } from "lucide-react";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
 const locales = { "en-US": require("date-fns/locale/en-US") };
@@ -38,6 +38,17 @@ const CustomToolbar = (toolbar) => {
           </button>
         ))}
       </div>
+    </div>
+  );
+};
+
+
+const CustomEvent = ({ event }) => {
+  return (
+    <div className="flex flex-col h-full w-full overflow-hidden">
+      <span className="whitespace-normal leading-tight font-bold text-xs" style={{ wordBreak: 'break-word', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
+        {event.title}
+      </span>
     </div>
   );
 };
@@ -102,7 +113,9 @@ export default function CalendarBoard() {
       source: t.source || 'internal',
       redmine_id: t.redmine_id,
       assigned_to: t.assigned_to,
-      comments: t.comments || []
+      comments: t.comments || [],
+      attachment_url: t.attachment_url,
+      attachment_name: t.attachment_name
     };
   });
 
@@ -145,7 +158,7 @@ export default function CalendarBoard() {
           style={{ height: "100%", width: "100%" }}
           onSelectEvent={t => setSelectedTask(t)}
           eventPropGetter={eventStyleGetter}
-          components={{ toolbar: CustomToolbar }}
+          components={{ toolbar: CustomToolbar, event: CustomEvent }}
           views={['month', 'week', 'agenda']}
           className="bg-white rounded-xl"
         />
@@ -211,6 +224,20 @@ export default function CalendarBoard() {
                   <p className="text-sm font-medium text-slate-800">{new Date(selectedTask.end).toLocaleDateString()}</p>
                 </div>
               </div>
+
+              {selectedTask.attachment_url && (
+                <div className="mt-6">
+                  <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Deployment Guide</p>
+                  <a
+                    href={selectedTask.attachment_url}
+                    download={selectedTask.attachment_name}
+                    className="flex items-center gap-2 text-sm font-bold text-sky-600 hover:text-sky-700 bg-sky-50 hover:bg-sky-100 px-4 py-3 rounded-xl transition-colors"
+                  >
+                    <Download className="w-4 h-4" />
+                    {selectedTask.attachment_name || "Download Attachment"}
+                  </a>
+                </div>
+              )}
             </div>
 
             {/* QUICK MOVE DROPDOWN (BAWAH) */}

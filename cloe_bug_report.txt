@@ -1,9 +1,0 @@
-Done.
-
-Bug in Next.js caching/PM2 restart. `FloatingChat.jsx` component changes not appearing. App build was stale.
-
-Fix:
-1. Rebuilt Next.js app with `npm run build`.
-2. Reloaded app process with `pm2 reload opstask-pro`.
-
-Result: UI updated. Floating Chat now visible. No screenshot needed; fix was build process, not code change.

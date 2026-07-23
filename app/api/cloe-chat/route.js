@@ -11,7 +11,13 @@ const execAsync = util.promisify(exec);
 export async function POST(req) {
   try {
     const body = await req.json();
-    const prompt = body.prompt || body.message;
+    let prompt = body.prompt || body.message;
+    
+    // Jika body.messages adalah array (dari Frontend FloatingChat)
+    if (!prompt && Array.isArray(body.messages) && body.messages.length > 0) {
+      const lastMessage = body.messages[body.messages.length - 1];
+      prompt = lastMessage.content;
+    }
 
     if (!prompt) {
       return NextResponse.json({ error: "Prompt is required" }, { status: 400 });

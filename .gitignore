@@ -38,3 +38,5 @@ qa-*.js
 qa-*.txt
 patch*.js
 fix*.js
+/public/exports/
+/venv/

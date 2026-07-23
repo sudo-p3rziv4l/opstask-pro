@@ -87,24 +87,55 @@ export async function POST(req) {
       }
     }
 
-    const command = `/home/perzival/.local/bin/cloe chat -q ${JSON.stringify(prompt)} < /dev/null`;
-    const { stdout, stderr } = await execAsync(command, {
-      env: {
-        ...process.env,
-        HOME: '/home/perzival',
-        PATH: process.env.PATH ? `${process.env.PATH}:/home/perzival/.local/bin` : '/usr/bin:/bin:/home/perzival/.local/bin',
-      },
-      timeout: 60000,
-    });
-
-    if (stderr && !stdout) {
-      console.error("Cloe CLI stderr:", stderr);
+        // Read Hermes config for API keys
+    const configPath = '/home/perzival/.hermes/profiles/cloe/config.yaml';
+    let apiKey = '';
+    let baseUrl = 'http://10.0.3.81:20128/v1/chat/completions';
+    
+    try {
+      const configStr = fs2.readFileSync(configPath, 'utf8');
+      const keyMatch = configStr.match(/api_key:\s*(.+)/);
+      if (keyMatch) apiKey = keyMatch[1].trim();
+    } catch (e) {
+      console.warn("Could not read cloe config, using fallback");
     }
 
-    const match = stdout.match(/╭─[^\n]+─╮\n([\s\S]+?)\n╰─[^\n]+─╯/);
-    const text = match ? match[1].trim() : stdout;
+    const messages = body.messages || [{ role: "user", content: prompt }];
+    // Pastikan ada system prompt agar Cloe tahu identitasnya
+    const systemPrompt = { 
+      role: "system", 
+      content: "You are Cloe AI, a helpful assistant integrated into OpsTask Pro. Answer concisely and professionally." 
+    };
 
-    return NextResponse.json({ response: text || stderr.trim() });
+    if (messages[0]?.role !== "system") {
+      messages.unshift(systemPrompt);
+    }
+
+    const aiRes = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: "xmen",
+        messages: messages,
+        temperature: 0.7,
+        max_tokens: 1024,
+        stream: false
+      }),
+      signal: AbortSignal.timeout(30000)
+    });
+
+    if (!aiRes.ok) {
+      const errorText = await aiRes.text();
+      throw new Error(`AI API returned ${aiRes.status}: ${errorText}`);
+    }
+
+    const aiData = await aiRes.json();
+    const text = aiData.choices[0].message.content;
+
+    return NextResponse.json({ response: text });
   } catch (error) {
     return NextResponse.json({ error: error.message || "Failed to execute cloe" }, { status: 500 });
   }

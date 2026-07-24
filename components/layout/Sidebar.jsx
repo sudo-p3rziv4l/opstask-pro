@@ -40,7 +40,7 @@ export default function Sidebar({ isOpen, setIsOpen, collapsed, setCollapsed }) 
   const sidebarWidth = collapsed ? 'w-[72px]' : 'w-[260px]';
 
   return (
-    <aside className={`${sidebarWidth} h-screen fixed left-0 top-0 bg-white border-r border-slate-100 flex flex-col z-30 shadow-[4px_0_24px_rgba(0,0,0,0.02)] transition-all duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 group`}>
+    <aside className={`${sidebarWidth} h-screen fixed left-0 top-0 bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 flex flex-col z-30 shadow-[4px_0_24px_rgba(0,0,0,0.02)] transition-all duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 group`}>
       
       {/* Modern floating toggle button on hover over the border area */}
       <button 
@@ -78,7 +78,7 @@ export default function Sidebar({ isOpen, setIsOpen, collapsed, setCollapsed }) 
               const isActive = pathname.startsWith(item.path);
               return (
                 <Link key={item.path} href={item.path} onClick={() => setIsOpen(false)} title={collapsed ? item.name : ''}>
-                  <div className={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-all ${collapsed ? 'justify-center' : ''} ${isActive ? 'bg-sky-50 text-sky-600' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'}`}>
+                  <div className={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-all ${collapsed ? 'justify-center' : ''} ${isActive ? 'bg-sky-50 text-sky-600' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800 dark:text-slate-100'}`}>
                     <item.icon className={`flex-shrink-0 ${collapsed ? 'w-5 h-5' : 'w-4 h-4'}`} />
                     {!collapsed && <span className="whitespace-nowrap text-[15px]">{item.name}</span>}
                   </div>

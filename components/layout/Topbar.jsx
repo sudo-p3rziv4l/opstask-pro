@@ -2,6 +2,7 @@
 import { Search, Bell, ChevronsUpDown, User, Settings, LogOut } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
+import ThemeSwitcher from './ThemeSwitcher';
 
 export default function Topbar({ onMenuClick, sidebarCollapsed }) {
   const router = useRouter();
@@ -33,9 +34,9 @@ export default function Topbar({ onMenuClick, sidebarCollapsed }) {
   const topbarPadding = sidebarCollapsed ? 'md:pl-[88px]' : 'md:pl-[276px]';
 
   return (
-    <header className={`fixed top-0 left-0 right-0 h-[72px] bg-white/80 backdrop-blur-sm border-b border-slate-100 z-10 transition-all duration-300 ${topbarPadding}`}>
+    <header className={`fixed top-0 left-0 right-0 h-[72px] bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-100 dark:border-slate-800 z-10 transition-all duration-300 ${topbarPadding}`}>
       <div className="px-4 md:px-8 h-full flex items-center justify-between">
-        <button className="md:hidden p-2 text-slate-500" onClick={onMenuClick}>
+        <button className="md:hidden p-2 text-slate-500 dark:text-slate-400" onClick={onMenuClick}>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
           </svg>
@@ -47,45 +48,46 @@ export default function Topbar({ onMenuClick, sidebarCollapsed }) {
             <input 
               type="text"
               placeholder="Search..."
-              className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all"
+              className="w-full pl-9 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-800 dark:text-slate-200 placeholder-slate-400 rounded-xl focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all"
             />
           </div>
         </div>
 
         <div className="flex items-center gap-2 md:gap-4">
-          <button className="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-full transition-colors">
+          <ThemeSwitcher />
+          <button className="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-full transition-colors dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800">
             <Bell className="w-5 h-5" />
           </button>
           
           <div className="relative" ref={dropdownRef}>
             <button 
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center gap-2 hover:bg-slate-50 p-1.5 rounded-lg transition-colors"
+              className="flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800 p-1.5 rounded-lg transition-colors"
             >
-              <div className="w-9 h-9 bg-sky-100 text-sky-600 rounded-full flex items-center justify-center font-bold text-sm">
+              <div className="w-9 h-9 bg-sky-100 dark:bg-sky-900 text-sky-600 dark:text-sky-400 rounded-full flex items-center justify-center font-bold text-sm">
                 {user?.username?.substring(0,2).toUpperCase() || '..'}
               </div>
               <div className="hidden md:flex flex-col text-left">
-                <span className="text-sm font-bold text-slate-800">{user?.name || user?.username}</span>
-                <span className="text-xs text-slate-500">{user?.role}</span>
+                <span className="text-sm font-bold text-slate-800 dark:text-slate-200">{user?.name || user?.username}</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">{user?.role}</span>
               </div>
-              <ChevronsUpDown className="hidden md:block w-4 h-4 text-slate-400" />
+              <ChevronsUpDown className="hidden md:block w-4 h-4 text-slate-400 dark:text-slate-500" />
             </button>
 
             {dropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-slate-100 rounded-xl shadow-lg p-2 z-50">
+              <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl shadow-lg p-2 z-50">
                 <div className="p-2">
-                  <p className="text-sm font-bold text-slate-800">{user?.name || user?.username}</p>
-                  <p className="text-xs text-slate-500">{user?.role}</p>
+                  <p className="text-sm font-bold text-slate-800 dark:text-slate-200">{user?.name || user?.username}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">{user?.role}</p>
                 </div>
-                <div className="w-full h-[1px] bg-slate-100 my-1"></div>
-                <button onClick={() => { router.push('/profile'); setDropdownOpen(false); }} className="w-full text-left flex items-center gap-2 p-2 text-slate-600 hover:bg-slate-50 rounded-lg transition-colors text-sm">
+                <div className="w-full h-[1px] bg-slate-100 dark:bg-slate-700 my-1"></div>
+                <button onClick={() => { router.push('/profile'); setDropdownOpen(false); }} className="w-full text-left flex items-center gap-2 p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors text-sm">
                   <User className="w-4 h-4" /> My Profile
                 </button>
-                <button onClick={() => { router.push('/settings'); setDropdownOpen(false); }} className="w-full text-left flex items-center gap-2 p-2 text-slate-600 hover:bg-slate-50 rounded-lg transition-colors text-sm">
+                <button onClick={() => { router.push('/settings'); setDropdownOpen(false); }} className="w-full text-left flex items-center gap-2 p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors text-sm">
                   <Settings className="w-4 h-4" /> Settings
                 </button>
-                <button onClick={handleLogout} className="w-full text-left flex items-center gap-2 p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors text-sm">
+                <button onClick={handleLogout} className="w-full text-left flex items-center gap-2 p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-sm">
                   <LogOut className="w-4 h-4" /> Sign Out
                 </button>
               </div>

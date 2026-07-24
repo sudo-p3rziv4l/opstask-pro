@@ -1,4 +1,5 @@
 import './globals.css';
+import { Providers } from './providers';
 
 export const metadata = {
   title: 'OpsTask Pro',
@@ -6,9 +7,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );
